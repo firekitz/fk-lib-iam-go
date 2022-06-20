@@ -1,0 +1,50 @@
+syntax = "proto3";
+package iampb;
+
+option go_package = "github.com/firekitz/proto/iampb";
+
+import "google/api/annotations.proto";
+
+service iam {
+  rpc auth(authRequest) returns (authResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth",
+      body: "*"
+    };
+  }
+  rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse) {
+    option (google.api.http) = {
+      post: "/v1/tokens/verify",
+      body: "*"
+    };
+  }
+}
+
+message authResponse {
+  int64 statusCode = 1;
+  string errorMessage = 2;
+  int64 domainId = 3;
+  int64 projectId = 4;
+  int64 accountId = 5;
+  int64 accountType = 6;
+  int64 issuedAt = 7;
+  int64 expiresAt = 8;
+}
+
+message authRequest {
+  string accessToken = 1;
+  repeated int64 permissions = 2;
+}
+
+message VerifyTokenRequest {
+  string accessToken = 1;
+}
+
+message VerifyTokenResponse {
+  int64 domainId = 3;
+  int64 projectId = 4;
+  int64 accountId = 5;
+  int64 accountType = 6;
+  int64 issuedAt = 7;
+  int64 expiresAt = 8;
+}
